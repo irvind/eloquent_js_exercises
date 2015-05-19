@@ -1,106 +1,106 @@
 function isObject(val) {
-	return typeof val == 'object' && val !== null;
+    return typeof val == 'object' && val !== null;
 }
 
 function sum(arr) {
-	var s = 0;
-	for (var i = 0; i < arr.length; i++) 
-		s += arr[i];
-	return s;
+    var s = 0;
+    for (var i = 0; i < arr.length; i++) 
+        s += arr[i];
+    return s;
 }
 
 function range(start, end, step) {
-	step = step || 1;
-	var res = [];
-	for (var i = start; start < end ? i <= end : i >= end; i += step) 
-		res.push(i);
-	return res;
+    step = step || 1;
+    var res = [];
+    for (var i = start; start < end ? i <= end : i >= end; i += step) 
+        res.push(i);
+    return res;
 }
 
 function reverseArray(arr) {
-	var res = [];
-	for (var i = arr.length - 1; i >= 0; i--) 
-		res.push(arr[i]);
-	return res;
+    var res = [];
+    for (var i = arr.length - 1; i >= 0; i--) 
+        res.push(arr[i]);
+    return res;
 }
 
 function reverseArrayInPlace(arr) {
-	for (var i = 0; i < Math.floor(arr.length) - 1; i++) {
-		var swap = arr[i];
-		arr[i] = arr[arr.length - 1 - i];
-		arr[arr.length - 1 - i] = swap;
-	}
+    for (var i = 0; i < Math.floor(arr.length) - 1; i++) {
+        var swap = arr[i];
+        arr[i] = arr[arr.length - 1 - i];
+        arr[arr.length - 1 - i] = swap;
+    }
 }
 
 function arrayToList(arr) {
-	if (arr.length == 0) 
-		return {};
+    if (arr.length == 0) 
+        return {};
 
-	var list, cur;
-	list = cur = {value: arr[0], rest: null};
-	for (var i = 1; i < arr.length; i++) {
-		var item = {value: arr[i], rest: null};
-		cur.rest = item;
-		cur = item;
-	}
+    var list, cur;
+    list = cur = {value: arr[0], rest: null};
+    for (var i = 1; i < arr.length; i++) {
+        var item = {value: arr[i], rest: null};
+        cur.rest = item;
+        cur = item;
+    }
 
-	return list;
+    return list;
 }
 
 function listToArray(list) {
-	var arr = [];
-	while (list != null) {
-		arr.push(list.value);
-		list = list.rest;
-	}
+    var arr = [];
+    while (list != null) {
+        arr.push(list.value);
+        list = list.rest;
+    }
 
-	return arr;
+    return arr;
 }
 
 function prepend(list, val) {
-	var newList = {value: val, rest: list};
-	return newList;
+    var newList = {value: val, rest: list};
+    return newList;
 }
 
 function nth(list, n) {
-	var item = list;
-	for (var i = 0; i < n; i++) {
-		item = item.rest;
-		if (item == null) 
-			return undefined;
-	}
+    var item = list;
+    for (var i = 0; i < n; i++) {
+        item = item.rest;
+        if (item == null) 
+            return undefined;
+    }
 
-	return item.value;
+    return item.value;
 }
 
-function deepEqual(a, b) {	
-	if (isObject(a) && isObject(b)) {
-		var prop, bProps = [];
+function deepEqual(a, b) {  
+    if (isObject(a) && isObject(b)) {
+        var prop, bProps = [];
 
-		for (prop in b) 
-			bProps.push(prop);
+        for (prop in b) 
+            bProps.push(prop);
 
-		for (prop in a) {
-			if (!(prop in b)) 
-				return false;
-			else if (isObject(a[prop]) && isObject(b[prop])) {
-				if (!deepEqual(a[prop], b[prop])) 
-					return false;
-			} else {
-				if (a[prop] !== b[prop])
-					return false;
-			}
+        for (prop in a) {
+            if (!(prop in b)) 
+                return false;
+            else if (isObject(a[prop]) && isObject(b[prop])) {
+                if (!deepEqual(a[prop], b[prop])) 
+                    return false;
+            } else {
+                if (a[prop] !== b[prop])
+                    return false;
+            }
 
-			bProps.splice(bProps.indexOf(prop), 1);
-		}
+            bProps.splice(bProps.indexOf(prop), 1);
+        }
 
-		if (bProps.length > 0) 
-			return false;
+        if (bProps.length > 0) 
+            return false;
 
-		return true;
-	} else {
-		return a === b;
-	}
+        return true;
+    } else {
+        return a === b;
+    }
 }
 
 console.log(sum(range(1, 10)));
