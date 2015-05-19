@@ -1,3 +1,7 @@
+function isObject(val) {
+	return typeof val == 'object' && val !== null;
+}
+
 function sum(arr) {
 	var s = 0;
 	for (var i = 0; i < arr.length; i++) 
@@ -69,6 +73,36 @@ function nth(list, n) {
 	return item.value;
 }
 
+function deepEqual(a, b) {	
+	if (isObject(a) && isObject(b)) {
+		var prop, bProps = [];
+
+		for (prop in b) 
+			bProps.push(prop);
+
+		for (prop in a) {
+			if (!(prop in b)) 
+				return false;
+			else if (isObject(a[prop]) && isObject(b[prop])) {
+				if (!deepEqual(a[prop], b[prop])) 
+					return false;
+			} else {
+				if (a[prop] !== b[prop])
+					return false;
+			}
+
+			bProps.splice(bProps.indexOf(prop), 1);
+		}
+
+		if (bProps.length > 0) 
+			return false;
+
+		return true;
+	} else {
+		return a === b;
+	}
+}
+
 console.log(sum(range(1, 10)));
 console.log(range(5, 2, -1))
 
@@ -82,3 +116,15 @@ var list = arrayToList([10, 20, 30, 40, 50]);
 console.log(list);
 
 console.log(listToArray(list));
+
+console.log(deepEqual(1, 1));
+console.log(deepEqual(1, 2));
+console.log(deepEqual('str', 'str'));
+
+var obj = {test: 5};
+console.log(deepEqual(obj, obj));
+console.log(deepEqual({a: 5}, {a: 5}));
+console.log(deepEqual({a: 5}, {a: 6}));
+console.log(deepEqual({a: 5}, {a: 5, b: 6}));
+console.log(deepEqual({a: 5, b: {test: 5}}, {a: 5, b: {test: 5}}));
+console.log(deepEqual({a: 5, b: {test: 5}}, {a: 5, b: {test: 6}}));
