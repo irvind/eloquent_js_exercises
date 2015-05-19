@@ -13,6 +13,7 @@ Rabbit.prototype.speak = function(message) {
 };
 
 Rabbit.prototype.die = function(message) {
+    this.alive = false; 
     console.log(this.fullName() + " is dead :(");
 }
 
