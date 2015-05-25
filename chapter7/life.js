@@ -283,7 +283,7 @@ var valley = new LifelikeWorld(
     {"#": Wall, "O": PlantEater, "*": Plant}
 );
 
-animateWorld(valley);
+// animateWorld(valley);
 
 // for (var i = 0; i < 5; i++) {
 //     try {
