@@ -113,4 +113,59 @@ specialForms['define'] = function(args, env) {
     return value;
 };
 
- console.log(parse("+(a, 10)"));
+specialForms['fun'] = function(args, env) {
+    if (!args.length)
+        throw new SyntaxError("Functions need a body");
+
+    function name(expr) {
+        if (expr.type != "word")
+            throw new SyntaxError("Arg names must be words");
+        return expr.name;
+    }
+    var argNames = args.slice(0, args.length - 1).map(name);
+    var body = args[args.length - 1];
+
+    return function() {
+        if (arguments.length != argNames.length) 
+            throw new TypeError("Wrong number of arguments");
+
+        var localEnv = Object.create(env);
+        for (var i = 0; i < arguments.length; i++)
+            localEnv[argNames[i]] = arguments[i];
+        return evalute(body, localEnv);
+    };
+};    
+
+var topEnv = Object.create(null);
+
+topEnv['true'] = true;
+topEnv['false'] = false;
+
+["+", "-", "*", "/", "==", "<", ">"].forEach(function(op) {
+    topEnv[op] = new Function('a, b', 'return a ' + op + ' b;')
+});
+
+topEnv['print'] = function(value) {
+    console.log(value);
+    return false;
+}
+
+function run() {
+    var env = Object.create(topEnv);
+    var program = Array.prototype.slice
+        .call(arguments, 0).join("\n");
+    return evalute(parse(program), env);
+}
+
+// run("do(define(total, 0),",
+//     "   define(count, 1),",
+//     "   while(<(count, 11),",
+//     "         do(define(total, +(total, count)),",
+//     "            define(count, +(count, 1)))),",
+//     "   print(total))");
+
+run("do(define(pow, fun(base, exp,",
+    "     if(==(exp, 0),",
+    "        1,",
+    "        *(base, pow(base, -(exp, 1)))))),",
+    "   print(pow(2, 10)))");
