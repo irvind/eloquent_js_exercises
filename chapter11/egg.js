@@ -25,7 +25,7 @@ function parseApply(expr, program) {
         expr.args.push(arg.expr);
         program = skipSpace(arg.rest);
         if (program[0] == ',')
-            program = skipSpace(arg.rest);
+            program = skipSpace(program.slice(1));
         else if (program[0] != ')')
             throw new SyntaxError("Expected ',' or ')'");
     }
@@ -47,4 +47,4 @@ function parse(program) {
     return result.expr;
 }
 
-console.log(parse("+(a, 10)"));
+ console.log(parse("+(a, 10)"));
