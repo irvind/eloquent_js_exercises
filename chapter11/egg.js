@@ -34,10 +34,26 @@ function parseApply(expr, program) {
 }
 
 function skipSpace(string) {
-    var first = string.search(/\S/)
-    if (first == -1) 
-        return '';
-    return string.slice(first);
+    // while (true) {
+    //     var first = string.search(/\S/);
+    //     if (first == -1) 
+    //         return '';
+
+    //     string = string.slice(first);
+    //     if (string[0] != '#')
+    //         return string;
+
+    //     var newline = string.search(/\n/);
+    //     if (newline == -1)
+    //         return '';
+
+    //     string = string.slice(newline + 1);
+    // }
+
+    var match = string.match(/^(\s+|#[^\n]*\n)+/);
+    if (match != null)
+        string = string.slice(match[0].length);
+    return string;
 }
 
 function parse(program) {
@@ -157,12 +173,19 @@ function run() {
     return evalute(parse(program), env);
 }
 
-// run("do(define(total, 0),",
-//     "   define(count, 1),",
-//     "   while(<(count, 11),",
-//     "         do(define(total, +(total, count)),",
-//     "            define(count, +(count, 1)))),",
-//     "   print(total))");
+function justParse() {
+    var env = Object.create(topEnv);
+    var program = Array.prototype.slice
+        .call(arguments, 0).join("\n");
+    console.log(parse(program));    
+}
+
+run("do(define(total, 0),",
+    "   define(count, 1),",
+    "   while(<(count, 11),",
+    "         do(define(total, +(total, count)),",
+    "            define(count, +(count, 1)))),",
+    "   print(total))");
 
 run("do(define(pow, fun(base, exp,",
     "     if(==(exp, 0),",
